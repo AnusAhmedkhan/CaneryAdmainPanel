@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom";
+import Dashboard from "../src/Pages/Dashboard";
+import Users from "../src/Pages/Users";
+import ResponsiveDrawer from "./Layout/ResponsiveDrawer";
 
 function App() {
+  const mainRoutes = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<ResponsiveDrawer />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/Users" element={<Users />} />
+      </Route>
+    )
+  );
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RouterProvider router={mainRoutes} />
     </div>
   );
 }

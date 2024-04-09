@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers } from "../../Services/UserServices/User";
+import { deleteUserByUid, getAllUsers } from "../../Services/UserServices/User";
 import { Box, Typography } from "@mui/material";
 import UserDataTable from "../../Components/UserDataTable";
-
+import toast from "react-hot-toast";
 const Index = () => {
   const [users, setUsers] = useState();
 
@@ -12,6 +12,12 @@ const Index = () => {
       console.log(data, "data");
     });
   };
+  const deleteUser = (id) => {
+    deleteUserByUid(id).then(() => {
+      toast.success("User Deleted SuccessFully");
+      allUsers();
+    });
+  };
   useEffect(() => {
     allUsers();
   }, []);
@@ -19,7 +25,7 @@ const Index = () => {
     <>
       <Box sx={{ marginX: "7rem", marginTop: "7rem", width: "100%" }}>
         <Typography sx={style.heading}>ALL USERS</Typography>
-        <UserDataTable users={users} />
+        <UserDataTable users={users} deleteUser={deleteUser} />
       </Box>
     </>
   );

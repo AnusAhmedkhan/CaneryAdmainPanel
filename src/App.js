@@ -9,9 +9,10 @@ import {
 import Dashboard from "../src/Pages/Dashboard";
 import Users from "../src/Pages/Users";
 import ResponsiveDrawer from "./Layout/ResponsiveDrawer";
-import Login from "./Pages/Login/Login";
-import { useContext } from "react";
+
 import { AuthContext } from "./Context/AuthContext";
+import { useContext } from "react";
+import Login from "./Pages/Login/Login";
 
 function App() {
   const { user } = useContext(AuthContext);

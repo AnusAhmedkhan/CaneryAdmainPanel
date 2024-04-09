@@ -36,3 +36,41 @@
     transform: rotate(360deg);
   }
 }
+
+input_wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease;
+}
+
+/*Important*/
+label {
+  background: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+  animation: reveal_button 0.5s linear; /* Extras */
+}
+
+label:hover {
+  padding: 0.8rem 2.1rem;
+  transition: all 0.3s ease;
+}
+
+label input {
+  display: none; /* to hide input (Important)  */
+}
+
+/* Extras */
+@keyframes reveal_button {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

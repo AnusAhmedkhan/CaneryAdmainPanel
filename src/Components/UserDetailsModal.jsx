@@ -13,12 +13,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { Box, Container } from "@mui/material";
 import Chip from "@mui/material/Chip";
+import { FaEdit } from "react-icons/fa";
+import TextField from "@mui/material/TextField";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const UserDetailsModal = ({ open, handleClose, currentUser }) => {
+const EditDetails = ({ currentUsers }) => {
+  const [currentUser, setCurrentUser] = React.useState(currentUsers);
   const normalizeAvailabilityData = (data) => {
     return Object.keys(data).map((day) => ({
       day,
@@ -30,92 +33,95 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
   const normalizedAvailabilityData = normalizeAvailabilityData(
     currentUser?.data?.availability
   );
+  const handleImage = (e) => {
+    console.log(e.target);
+  };
   return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
-      <AppBar sx={{ position: "relative" }}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {currentUser?.data?.name} Details
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <>
       <Box sx={style.detailBox}>
         <Container sx={style.container}>
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Box sx={{ flex: 1 }}>
+            <Box
+              sx={{
+                flex: 1,
+                flexDirection: "column",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <div className="input_wrapper">
+                <label for="img">
+                  Choose an image
+                  <input
+                    type="file"
+                    name="img"
+                    id="img"
+                    onChange={(e) => handleImage(e)}
+                  />
+                </label>
+              </div>
               <img
                 src={currentUser?.data?.imageURL}
                 alt="user"
                 style={{
                   borderRadius: "20px",
                   marginBottom: "15px",
-                  width: "350px",
-                  height: "500px",
+                  marginTop: "15px",
+                  width: "250px",
+                  height: "300px",
                 }}
               />
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography sx={style.key}>
-                Full Name : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.name}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                Email : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.email}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                Phone Number : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.phoneNumber}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                Bio : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.bio}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                City : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.city}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                State : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.state}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                Wallet Amount : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  $ {currentUser?.data?.walletAmount}
-                </span>
-              </Typography>
-              <Typography sx={style.key}>
-                Bisuness Type : <br />
-                <span style={{ opacity: 0.7, fontSize: "22px" }}>
-                  {currentUser?.data?.businessType}
-                </span>
-              </Typography>
+              <TextField
+                id="outlined-basic"
+                label="Full Name"
+                variant="outlined"
+                value={currentUser?.data?.name}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Email"
+                variant="outlined"
+                value={currentUser?.data?.email}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Phone Number"
+                variant="outlined"
+                value={currentUser?.data?.phoneNumber}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Bio"
+                variant="outlined"
+                value={currentUser?.data?.bio}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="City"
+                variant="outlined"
+                value={currentUser?.data?.city}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="State"
+                variant="outlined"
+                value={currentUser?.data?.state}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Bissuness Type"
+                variant="outlined"
+                value={currentUser?.data?.businessType}
+                sx={{ marginY: "12px", width: "80%" }}
+              />
             </Box>
             <Box sx={{ flex: 1 }}>
               <Typography sx={style.key}>
@@ -180,8 +186,202 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
               </ul>
             </Box>
           </Box>
+          <Button sx={{ width: "100%" }} variant="contained">
+            Save Edit
+          </Button>
         </Container>
       </Box>
+    </>
+  );
+};
+
+const UserDetailsModal = ({ open, handleClose, currentUser }) => {
+  const [isEdit, setIsEdit] = React.useState(true);
+  const normalizeAvailabilityData = (data) => {
+    if (data) {
+      return Object.keys(data).map((day) => ({
+        day,
+        startTime: data[day].startTime,
+        endTime: data[day].endTime,
+      }));
+    }
+  };
+
+  const normalizedAvailabilityData = normalizeAvailabilityData(
+    currentUser?.data?.availability
+  );
+  return (
+    <Dialog
+      fullScreen
+      open={open}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            {currentUser?.data?.name} Details
+          </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => {
+              setIsEdit(!isEdit);
+            }}
+            aria-label="close"
+          >
+            <Typography
+              sx={{ ml: 2, flex: 1, fontFamily: "Poppins" }}
+              variant="h6"
+              component="div"
+            >
+              <FaEdit sx={{ color: "white" }} /> Edit
+            </Typography>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      {isEdit ? (
+        <Box sx={style.detailBox}>
+          <Container sx={style.container}>
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              <Box sx={{ flex: 1 }}>
+                <img
+                  src={currentUser?.data?.imageURL}
+                  alt="user"
+                  style={{
+                    borderRadius: "20px",
+                    marginBottom: "15px",
+                    width: "350px",
+                    height: "500px",
+                  }}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography sx={style.key}>
+                  Full Name : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.name}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  Email : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.email}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  Phone Number : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.phoneNumber}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  Bio : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.bio}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  City : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.city}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  State : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.state}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  Wallet Amount : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    $ {currentUser?.data?.walletAmount}
+                  </span>
+                </Typography>
+                <Typography sx={style.key}>
+                  Bisuness Type : <br />
+                  <span style={{ opacity: 0.7, fontSize: "22px" }}>
+                    {currentUser?.data?.businessType}
+                  </span>
+                </Typography>
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography sx={style.key}>
+                  Availablity : <br />
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "start",
+                    gap: "8px",
+                    flexWrap: "wrap",
+                    marginBottom: "10px",
+                  }}
+                >
+                  {normalizedAvailabilityData &&
+                    normalizedAvailabilityData?.map((dayData) => (
+                      <Chip
+                        key={dayData?.day}
+                        label={`${dayData?.day}: ${dayData?.startTime} - ${dayData?.endTime}`}
+                        variant="outlined"
+                      />
+                    ))}
+                </Box>
+                <Typography sx={style.key}>
+                  Bisuness Category : <br />
+                </Typography>
+                <ul>
+                  {currentUser?.data?.businessCategory &&
+                    Object.entries(currentUser?.data?.businessCategory).map(
+                      ([categoryName, services]) => (
+                        <li key={categoryName}>
+                          <strong style={{ fontFamily: "Poppins" }}>
+                            {categoryName}
+                          </strong>
+
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "start",
+                              gap: "8px",
+                              flexWrap: "wrap",
+                              marginY: "5px",
+                            }}
+                          >
+                            {Object.entries(services).map(
+                              ([serviceName, value]) => (
+                                <Chip
+                                  key={serviceName}
+                                  label={` ${serviceName}: ${value}`}
+                                  variant="outlined"
+                                />
+                              )
+                            )}
+                          </Box>
+                        </li>
+                      )
+                    )}
+                </ul>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
+      ) : (
+        <EditDetails currentUsers={currentUser} />
+      )}
     </Dialog>
   );
 };

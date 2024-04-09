@@ -19,19 +19,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const UserDetailsModal = ({ open, handleClose, currentUser }) => {
-  console.log(currentUser, "currentUser");
   const normalizeAvailabilityData = (data) => {
-    return Object.keys(data).map((day) => ({
-      day,
-      startTime: data[day].startTime,
-      endTime: data[day].endTime,
-    }));
+    if (data) {
+      return Object.keys(data).map((day) => ({
+        day,
+        startTime: data[day].startTime,
+        endTime: data[day].endTime,
+      }));
+    }
   };
 
   const normalizedAvailabilityData = normalizeAvailabilityData(
-    currentUser.data.availability
+    currentUser?.data?.availability
   );
-  console.log(normalizedAvailabilityData, "normalizedAvailabilityData");
   return (
     <Dialog
       fullScreen
@@ -147,37 +147,38 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
                 Bisuness Category : <br />
               </Typography>
               <ul>
-                {Object.entries(currentUser?.data?.businessCategory).map(
-                  ([categoryName, services]) => (
-                    <li key={categoryName}>
-                      <strong style={{ fontFamily: "Poppins" }}>
-                        {categoryName}
-                      </strong>
+                {currentUser?.data?.businessCategory &&
+                  Object.entries(currentUser?.data?.businessCategory).map(
+                    ([categoryName, services]) => (
+                      <li key={categoryName}>
+                        <strong style={{ fontFamily: "Poppins" }}>
+                          {categoryName}
+                        </strong>
 
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "start",
-                          gap: "8px",
-                          flexWrap: "wrap",
-                          marginY: "5px",
-                        }}
-                      >
-                        {Object.entries(services).map(
-                          ([serviceName, value]) => (
-                            <Chip
-                              key={serviceName}
-                              label={` ${serviceName}: ${value}`}
-                              variant="outlined"
-                            />
-                          )
-                        )}
-                      </Box>
-                    </li>
-                  )
-                )}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "start",
+                            gap: "8px",
+                            flexWrap: "wrap",
+                            marginY: "5px",
+                          }}
+                        >
+                          {Object.entries(services).map(
+                            ([serviceName, value]) => (
+                              <Chip
+                                key={serviceName}
+                                label={` ${serviceName}: ${value}`}
+                                variant="outlined"
+                              />
+                            )
+                          )}
+                        </Box>
+                      </li>
+                    )
+                  )}
               </ul>
             </Box>
           </Box>

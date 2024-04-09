@@ -44,19 +44,8 @@ function ResponsiveDrawer(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  //   React.useEffect(() => {
-  //     if (!user) {
-  //       navigate("/Login");
-  //     }
-  //   }, []);
-  //   React.useEffect(() => {
-  //     console.log(userData, "userData");
-  //   }, [userData]);
+
   const PatList = [
-    // {
-    //   text: "Doctobo",
-    //   link: "/",
-    // },
     {
       text: "Account Setting",
       link: "/Dashboard",
@@ -82,7 +71,6 @@ function ResponsiveDrawer(props) {
     },
   ];
 
-  //   const itemsList = userData.role === "doctor" ? DocList : PatList;
   const drawer = (
     <div
       style={{
@@ -93,7 +81,7 @@ function ResponsiveDrawer(props) {
       }}
     >
       <Toolbar />
-      {/* <Divider /> */}
+
       <List
         sx={{
           color: "white",
@@ -148,23 +136,9 @@ function ResponsiveDrawer(props) {
           </ListItem>
         ))}
       </List>
-      {/* <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </div>
   );
 
-  // Remove this const when copying and pasting into your project.
   const container =
     window !== undefined ? () => window().document.body : undefined;
 

@@ -23,8 +23,8 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
   const normalizeAvailabilityData = (data) => {
     return Object.keys(data).map((day) => ({
       day,
-      startTime: data[day].startTime,
-      endTime: data[day].endTime,
+      startTime: data[day]?.startTime,
+      endTime: data[day]?.endTime,
     }));
   };
 

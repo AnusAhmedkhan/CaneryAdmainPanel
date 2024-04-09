@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import UserDetailsModal from "./UserDetailsModal";
 
@@ -24,7 +24,7 @@ const rows = [
 
 export default function UserDataTable({ users }) {
   const [open, setOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState();
+  const [currentUser, setCurrentUser] = React.useState(null);
 
   const handleClose = () => {
     setOpen(false);
@@ -33,6 +33,7 @@ export default function UserDataTable({ users }) {
     setOpen(true);
     setCurrentUser(user);
   };
+  const deleteUser = (id) => {};
   return (
     <>
       <TableContainer component={Paper}>
@@ -71,14 +72,37 @@ export default function UserDataTable({ users }) {
                     {row?.data?.city} / {row?.data?.state}
                   </TableCell>
                   <TableCell align="left">
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        handleModal(row);
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: "14px",
                       }}
                     >
-                      View Details
-                    </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          handleModal(row);
+                        }}
+                      >
+                        View Details
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          deleteUser(row?.id);
+                        }}
+                        sx={{
+                          backgroundColor: "red",
+                          ":hover": {
+                            backgroundColor: "red",
+                          },
+                        }}
+                      >
+                        Delete User
+                      </Button>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}

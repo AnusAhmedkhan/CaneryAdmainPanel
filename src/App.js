@@ -9,6 +9,7 @@ import {
 import Dashboard from "../src/Pages/Dashboard";
 import Users from "../src/Pages/Users";
 import ResponsiveDrawer from "./Layout/ResponsiveDrawer";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const mainRoutes = createBrowserRouter(
@@ -22,6 +23,7 @@ function App() {
   return (
     <div className="App">
       <RouterProvider router={mainRoutes} />
+      <Toaster />
     </div>
   );
 }

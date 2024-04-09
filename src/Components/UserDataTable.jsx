@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Button, Box } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import UserDetailsModal from "./UserDetailsModal";
+import { deleteUserByUid } from "../Services/UserServices/User";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -22,7 +23,7 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function UserDataTable({ users }) {
+export default function UserDataTable({ users, deleteUser }) {
   const [open, setOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
@@ -33,7 +34,7 @@ export default function UserDataTable({ users }) {
     setOpen(true);
     setCurrentUser(user);
   };
-  const deleteUser = (id) => {};
+
   return (
     <>
       <TableContainer component={Paper}>

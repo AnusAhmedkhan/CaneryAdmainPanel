@@ -1,6 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../Firebase/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 export const getAllUsers = async () => {
   let temp = [];
   const querySnapshot = await getDocs(collection(db, "users"));
@@ -16,4 +17,10 @@ export const getAllUsers = async () => {
 
 export const deleteUserByUid = async (id) => {
   await deleteDoc(doc(db, "users", id));
+};
+
+export const updateUserDoc = async (item) => {
+  const washingtonRef = doc(db, "users", item.id);
+
+  await updateDoc(washingtonRef, item.data);
 };

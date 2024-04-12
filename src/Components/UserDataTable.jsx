@@ -23,7 +23,7 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function UserDataTable({ users, deleteUser }) {
+export default function UserDataTable({ users, deleteUser, setIsChanges }) {
   const [open, setOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
@@ -114,6 +114,7 @@ export default function UserDataTable({ users, deleteUser }) {
         open={open}
         handleClose={handleClose}
         currentUser={currentUser}
+        setIsChanges={setIsChanges}
       />
     </>
   );

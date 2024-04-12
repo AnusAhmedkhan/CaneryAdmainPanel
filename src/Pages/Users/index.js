@@ -5,7 +5,7 @@ import UserDataTable from "../../Components/UserDataTable";
 import toast from "react-hot-toast";
 const Index = () => {
   const [users, setUsers] = useState();
-
+  const [isChanges, setIsChanges] = React.useState(false);
   const allUsers = () => {
     getAllUsers().then((data) => {
       setUsers(data);
@@ -21,11 +21,18 @@ const Index = () => {
   useEffect(() => {
     allUsers();
   }, []);
+  useEffect(() => {
+    allUsers();
+  }, [isChanges]);
   return (
     <>
       <Box sx={{ marginX: "7rem", marginTop: "7rem", width: "100%" }}>
         <Typography sx={style.heading}>ALL USERS</Typography>
-        <UserDataTable users={users} deleteUser={deleteUser} />
+        <UserDataTable
+          users={users}
+          deleteUser={deleteUser}
+          setIsChanges={setIsChanges}
+        />
       </Box>
     </>
   );

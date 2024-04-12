@@ -15,12 +15,21 @@ import { Box, Container } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import { FaEdit } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
+import { updateUserDoc } from "../Services/UserServices/User";
+import toast from "react-hot-toast";
+import { storage } from "../Firebase/firebase.config";
+import {
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const EditDetails = ({ currentUsers }) => {
+const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
   const [currentUser, setCurrentUser] = React.useState(currentUsers);
   const normalizeAvailabilityData = (data) => {
     return Object.keys(data).map((day) => ({
@@ -34,7 +43,70 @@ const EditDetails = ({ currentUsers }) => {
     currentUser?.data?.availability
   );
   const handleImage = (e) => {
-    console.log(e.target);
+    let image = e.target.files[0];
+    if (image) {
+      const storageRef = ref(storage, `images/${image.name}`);
+
+      //   const uploadTask = uploadBytes(storageRef, image);
+      const uploadTask = uploadBytesResumable(storageRef, image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            setCurrentUser({
+              ...currentUser,
+              data: {
+                ...currentUser.data,
+                ["imageURL"]: downloadURL,
+              },
+            });
+          });
+        }
+      );
+    }
+    console.log(image.name);
+  };
+  const handleChange = (e, key) => {
+    setCurrentUser({
+      ...currentUser,
+      data: {
+        ...currentUser.data,
+        [key]: e.target.value,
+      },
+    });
+  };
+  //   React.useEffect(() => {
+  //     console.log(currentUser, "current user");
+  //   }, [currentUser]);
+  const handleEdit = () => {
+    updateUserDoc(currentUser)
+      .then(() => {
+        toast.success("User Updated Successfully");
+        setIsChanges(true);
+        handleClose();
+      })
+      .catch((err) => {
+        toast.error("User Not Updated");
+      });
   };
   return (
     <>
@@ -78,6 +150,9 @@ const EditDetails = ({ currentUsers }) => {
                 label="Full Name"
                 variant="outlined"
                 value={currentUser?.data?.name}
+                onChange={(e) => {
+                  handleChange(e, "name");
+                }}
                 sx={{ marginY: "12px", width: "80%" }}
               />
               <TextField
@@ -85,12 +160,18 @@ const EditDetails = ({ currentUsers }) => {
                 label="Email"
                 variant="outlined"
                 value={currentUser?.data?.email}
+                onChange={(e) => {
+                  handleChange(e, "email");
+                }}
                 sx={{ marginY: "12px", width: "80%" }}
               />
               <TextField
                 id="outlined-basic"
                 label="Phone Number"
                 variant="outlined"
+                onChange={(e) => {
+                  handleChange(e, "phoneNumber");
+                }}
                 value={currentUser?.data?.phoneNumber}
                 sx={{ marginY: "12px", width: "80%" }}
               />
@@ -98,6 +179,9 @@ const EditDetails = ({ currentUsers }) => {
                 id="outlined-basic"
                 label="Bio"
                 variant="outlined"
+                onChange={(e) => {
+                  handleChange(e, "bio");
+                }}
                 value={currentUser?.data?.bio}
                 sx={{ marginY: "12px", width: "80%" }}
               />
@@ -105,6 +189,9 @@ const EditDetails = ({ currentUsers }) => {
                 id="outlined-basic"
                 label="City"
                 variant="outlined"
+                onChange={(e) => {
+                  handleChange(e, "city");
+                }}
                 value={currentUser?.data?.city}
                 sx={{ marginY: "12px", width: "80%" }}
               />
@@ -112,6 +199,9 @@ const EditDetails = ({ currentUsers }) => {
                 id="outlined-basic"
                 label="State"
                 variant="outlined"
+                onChange={(e) => {
+                  handleChange(e, "state");
+                }}
                 value={currentUser?.data?.state}
                 sx={{ marginY: "12px", width: "80%" }}
               />
@@ -186,7 +276,11 @@ const EditDetails = ({ currentUsers }) => {
               </ul>
             </Box>
           </Box>
-          <Button sx={{ width: "100%" }} variant="contained">
+          <Button
+            sx={{ width: "100%" }}
+            variant="contained"
+            onClick={handleEdit}
+          >
             Save Edit
           </Button>
         </Container>
@@ -195,8 +289,9 @@ const EditDetails = ({ currentUsers }) => {
   );
 };
 
-const UserDetailsModal = ({ open, handleClose, currentUser }) => {
+const UserDetailsModal = ({ open, handleClose, currentUser, setIsChanges }) => {
   const [isEdit, setIsEdit] = React.useState(true);
+
   const normalizeAvailabilityData = (data) => {
     if (data) {
       return Object.keys(data).map((day) => ({
@@ -210,6 +305,7 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
   const normalizedAvailabilityData = normalizeAvailabilityData(
     currentUser?.data?.availability
   );
+
   return (
     <Dialog
       fullScreen
@@ -380,7 +476,11 @@ const UserDetailsModal = ({ open, handleClose, currentUser }) => {
           </Container>
         </Box>
       ) : (
-        <EditDetails currentUsers={currentUser} />
+        <EditDetails
+          currentUsers={currentUser}
+          setIsChanges={setIsChanges}
+          handleClose={handleClose}
+        />
       )}
     </Dialog>
   );

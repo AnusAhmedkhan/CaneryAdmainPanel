@@ -24,7 +24,6 @@ import MedicationIcon from "@mui/icons-material/Medication";
 const drawerWidth = 300;
 
 function ResponsiveDrawer(props) {
-  //   const { user, userData } = React.useContext(AuthContext);
   const { window } = props;
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -45,21 +44,6 @@ function ResponsiveDrawer(props) {
     }
   };
 
-  const PatList = [
-    {
-      text: "Account Setting",
-      link: "/Dashboard",
-    },
-    {
-      text: "Home",
-      link: "/",
-    },
-
-    {
-      text: " Appointments",
-      link: "/Dashboard/PatientAppointment",
-    },
-  ];
   const list = [
     {
       text: "Dashboard",
@@ -173,7 +157,6 @@ function ResponsiveDrawer(props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
@@ -225,13 +208,5 @@ function ResponsiveDrawer(props) {
     </Box>
   );
 }
-
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window: PropTypes.func,
-};
 
 export default ResponsiveDrawer;

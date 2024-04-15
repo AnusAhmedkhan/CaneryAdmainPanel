@@ -94,20 +94,56 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
       },
     });
   };
-  //   React.useEffect(() => {
-  //     console.log(currentUser, "current user");
-  //   }, [currentUser]);
+
+  const [editedAvailability, setEditedAvailability] = React.useState({});
+
+  const handleInputChange = (oldDay, field, value) => {
+    const updatedAvailability = { ...editedAvailability };
+
+    if (!updatedAvailability[oldDay]) {
+      updatedAvailability[oldDay] = {
+        ...currentUser.data.availability[oldDay],
+      };
+    }
+
+    if (field === "day") {
+      const { startTime, endTime } = updatedAvailability[oldDay];
+      delete updatedAvailability[oldDay];
+      updatedAvailability[value] = { startTime, endTime };
+    } else {
+      updatedAvailability[oldDay][field] = value;
+    }
+
+    // setEditedAvailability(updatedAvailability);
+    const updatedData = {
+      ...currentUser.data.availability,
+      ...updatedAvailability,
+    };
+    setCurrentUser({
+      ...currentUser,
+      data: {
+        ...currentUser.data,
+        availability: updatedData,
+      },
+    });
+  };
+
   const handleEdit = () => {
     updateUserDoc(currentUser)
       .then(() => {
         toast.success("User Updated Successfully");
         setIsChanges(true);
         handleClose();
+        setEditedAvailability({});
       })
       .catch((err) => {
         toast.error("User Not Updated");
       });
   };
+  React.useEffect(() => {
+    console.log(currentUser.data.availability["Wednesday"], "current user");
+  }, [currentUser]);
+
   return (
     <>
       <Box sx={style.detailBox}>
@@ -115,7 +151,7 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <Box
               sx={{
-                flex: 1,
+                flex: { lg: 1 },
                 flexDirection: "column",
                 display: "flex",
                 alignItems: "center",
@@ -144,7 +180,7 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                 }}
               />
             </Box>
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: { lg: 1 } }}>
               <TextField
                 id="outlined-basic"
                 label="Full Name"
@@ -213,29 +249,64 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                 sx={{ marginY: "12px", width: "80%" }}
               />
             </Box>
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: { lg: 1 } }}>
               <Typography sx={style.key}>
                 Availablity : <br />
               </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: "column",
+                  alignItems: "start",
                   justifyContent: "start",
                   gap: "8px",
                   flexWrap: "wrap",
                   marginBottom: "10px",
                 }}
               >
-                {normalizedAvailabilityData &&
-                  normalizedAvailabilityData?.map((dayData) => (
-                    <Chip
-                      key={dayData?.day}
-                      label={`${dayData?.day}: ${dayData?.startTime} - ${dayData?.endTime}`}
-                      variant="outlined"
-                    />
-                  ))}
+                {Object.keys(currentUser.data.availability).map((day) => (
+                  <>
+                    <div key={day}>
+                      {console.log(Object.keys(currentUser.data.availability))}
+                      <h3>
+                        Day:
+                        <input
+                          type="text"
+                          value={day}
+                          onChange={(e) =>
+                            handleInputChange(day, "day", e.target.value)
+                          }
+                        />
+                      </h3>
+                      <Typography>Start Time:</Typography>
+                      <input
+                        type="text"
+                        value={
+                          editedAvailability.day?.startTime ||
+                          currentUser.data.availability[day].startTime ||
+                          ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange(day, "startTime", e.target.value)
+                        }
+                      />
+
+                      <Typography>End Time:</Typography>
+                      <input
+                        type="text"
+                        value={
+                          editedAvailability[day]?.endTime ||
+                          currentUser.data.availability[day].endTime ||
+                          ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange(day, "endTime", e.target.value)
+                        }
+                      />
+                    </div>
+                    <hr />
+                  </>
+                ))}
               </Box>
               <Typography sx={style.key}>
                 Bisuness Category : <br />
@@ -348,7 +419,7 @@ const UserDetailsModal = ({ open, handleClose, currentUser, setIsChanges }) => {
         <Box sx={style.detailBox}>
           <Container sx={style.container}>
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-              <Box sx={{ flex: 1 }}>
+              <Box sx={{ flex: { lg: 1 } }}>
                 <img
                   src={currentUser?.data?.imageURL}
                   alt="user"
@@ -360,7 +431,7 @@ const UserDetailsModal = ({ open, handleClose, currentUser, setIsChanges }) => {
                   }}
                 />
               </Box>
-              <Box sx={{ flex: 1 }}>
+              <Box sx={{ flex: { lg: 1 }, paddingLeft: "1rem" }}>
                 <Typography sx={style.key}>
                   Full Name : <br />
                   <span style={{ opacity: 0.7, fontSize: "22px" }}>
@@ -410,7 +481,7 @@ const UserDetailsModal = ({ open, handleClose, currentUser, setIsChanges }) => {
                   </span>
                 </Typography>
               </Box>
-              <Box sx={{ flex: 1 }}>
+              <Box sx={{ flex: { lg: 1 } }}>
                 <Typography sx={style.key}>
                   Availablity : <br />
                 </Typography>

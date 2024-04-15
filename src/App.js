@@ -13,6 +13,7 @@ import ResponsiveDrawer from "./Layout/ResponsiveDrawer";
 import { AuthContext } from "./Context/AuthContext";
 import { useContext } from "react";
 import Login from "./Pages/Login/Login";
+import Services from "./Pages/Services";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -21,6 +22,7 @@ function App() {
       <Route path="/" element={<ResponsiveDrawer />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/Users" element={<Users />} />
+        <Route path="/Services" element={<Services />} />
       </Route>
     )
   );

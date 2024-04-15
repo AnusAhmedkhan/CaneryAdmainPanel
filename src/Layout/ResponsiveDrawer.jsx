@@ -53,6 +53,10 @@ function ResponsiveDrawer(props) {
       text: "Users",
       link: "/Users",
     },
+    {
+      text: "Services",
+      link: "/Services",
+    },
   ];
 
   const drawer = (
@@ -135,7 +139,7 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
 
-          backgroundColor: "#E5F3FD",
+          backgroundColor: "#FFF",
           boxShadow: 0,
         }}
       >

@@ -19,13 +19,3 @@ export const adminLogin = async (email, password) => {
     return false;
   }
 };
-
-export const getServices = async () => {
-  const collection = collection(db, "service");
-  const docData = await getDocs(collection);
-
-  const data = docData.docs.map((doc) => {
-    return { ...doc.data() };
-  });
-  return data;
-};

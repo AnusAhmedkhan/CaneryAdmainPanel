@@ -1,9 +1,12 @@
 import { Box, Button, Container, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getAllRemainders } from "../../Services/UserServices/User";
+import RemainderCard from "../../Components/RemainderCard";
+import GroupsDialog from "../../Components/Dialog";
 
 const Remainder = () => {
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
   const getData = async () => {
     const data1 = await getAllRemainders();
     console.log(data1, "services");
@@ -16,11 +19,41 @@ const Remainder = () => {
     <Box sx={styles.main}>
       <Container sx={styles.cont}>
         <Box sx={styles.btnParent}>
-          <Button sx={styles.btn}>Add Remainder</Button>
+          <Button sx={styles.btn} onClick={() => setOpen(true)}>
+            Add Remainder
+          </Button>
         </Box>
-        <Grid container sx={{ wisth: "100%" }}>
-          <Grid item lg={4}></Grid>
+        <Grid
+          container
+          sx={{ wisth: "100%" }}
+          columnSpacing={3}
+          rowSpacing={3}
+          marginTop={2}
+        >
+          {data?.map((items, index) => {
+            return (
+              <>
+                <Grid item lg={4} key={index}>
+                  <RemainderCard
+                    sellerName={items.sellerName}
+                    clientName={items.clientName}
+                    date={items.date}
+                    description={items.description}
+                  />
+                </Grid>
+              </>
+            );
+          })}
         </Grid>
+        {open && (
+          <GroupsDialog
+            open={open}
+            onClose={() => {
+              setOpen(false);
+              getData();
+            }}
+          />
+        )}
       </Container>
     </Box>
   );
@@ -31,7 +64,7 @@ const styles = {
   main: { marginTop: "5rem", width: "100%", overFlow: "hidden" },
 
   cont: {
-    maxWidth: { lg: "1300px" },
+    maxWidth: { lg: "1400px" },
   },
   btnParent: {
     width: "100%",

@@ -90,3 +90,33 @@ export const getAllDataDashboard = async () => {
     throw error;
   }
 };
+
+export const getAllRemainders = async () => {
+  const collRef = collection(db, "remainder");
+  try {
+    const docRef = await getDocs(collRef);
+    const docData = docRef.docs.map(async (document) => {
+      let clientName = "Unknown"; // Initialize clientName
+
+      // Check if clientId is not null
+      if (document.data().clientId) {
+        const docc1 = await getDoc(doc(db, "client", document.data().clientId));
+        clientName = docc1.data().firstName; // Assign clientName if clientId is not null
+      }
+
+      const id = document.data().providerId;
+      const userDocRef = doc(db, "users", id);
+      const userDocSnap = await getDoc(userDocRef);
+
+      return {
+        ...document.data(),
+        clientName: clientName,
+        sellerName: userDocSnap.data().name,
+      };
+    });
+
+    return Promise.all(docData);
+  } catch (error) {
+    return error;
+  }
+};

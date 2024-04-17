@@ -6,7 +6,6 @@ export const getAllUsers = async () => {
   let temp = [];
   const querySnapshot = await getDocs(collection(db, "users"));
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
     temp.push({
       data: doc.data(),
       id: doc.id,
@@ -14,7 +13,17 @@ export const getAllUsers = async () => {
   });
   return temp;
 };
-
+export const getAllClients = async () => {
+  let temp = [];
+  const querySnapshot = await getDocs(collection(db, "client"));
+  querySnapshot.forEach((doc) => {
+    temp.push({
+      data: doc.data(),
+      id: doc.id,
+    });
+  });
+  return temp;
+};
 export const deleteUserByUid = async (id) => {
   await deleteDoc(doc(db, "users", id));
 };
@@ -88,5 +97,35 @@ export const getAllDataDashboard = async () => {
   } catch (error) {
     console.error("Error fetching collection data:", error);
     throw error;
+  }
+};
+
+export const getAllRemainders = async () => {
+  const collRef = collection(db, "remainder");
+  try {
+    const docRef = await getDocs(collRef);
+    const docData = docRef.docs.map(async (document) => {
+      let clientName = "Unknown"; // Initialize clientName
+
+      // Check if clientId is not null
+      if (document.data().clientId) {
+        const docc1 = await getDoc(doc(db, "client", document.data().clientId));
+        clientName = docc1.data().firstName; // Assign clientName if clientId is not null
+      }
+
+      const id = document.data().providerId;
+      const userDocRef = doc(db, "users", id);
+      const userDocSnap = await getDoc(userDocRef);
+
+      return {
+        ...document.data(),
+        clientName: clientName,
+        sellerName: userDocSnap.data().name,
+      };
+    });
+
+    return Promise.all(docData);
+  } catch (error) {
+    return error;
   }
 };

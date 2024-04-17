@@ -14,6 +14,7 @@ import { AuthContext } from "./Context/AuthContext";
 import { useContext } from "react";
 import Login from "./Pages/Login/Login";
 import Services from "./Pages/Services";
+import Remainder from "./Pages/Remainders";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/Users" element={<Users />} />
         <Route path="/Services" element={<Services />} />
+        <Route path="/Remainders" element={<Remainder />} />
       </Route>
     )
   );

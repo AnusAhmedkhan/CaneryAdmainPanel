@@ -114,10 +114,13 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
       updatedAvailability[oldDay][field] = value;
     }
 
-    // setEditedAvailability(updatedAvailability);
+    setEditedAvailability(updatedAvailability);
+  };
+
+  const handleEdit = () => {
     const updatedData = {
       ...currentUser.data.availability,
-      ...updatedAvailability,
+      ...editedAvailability,
     };
     setCurrentUser({
       ...currentUser,
@@ -126,10 +129,15 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
         availability: updatedData,
       },
     });
-  };
-
-  const handleEdit = () => {
-    updateUserDoc(currentUser)
+    let temp = {
+      ...currentUser,
+      data: {
+        ...currentUser.data,
+        availability: updatedData,
+      },
+    };
+    // console.log(temp, "temp");
+    updateUserDoc(temp)
       .then(() => {
         toast.success("User Updated Successfully");
         setIsChanges(true);
@@ -141,7 +149,7 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
       });
   };
   React.useEffect(() => {
-    console.log(currentUser.data.availability["Wednesday"], "current user");
+    console.log(currentUser, "current user");
   }, [currentUser]);
 
   return (
@@ -269,14 +277,19 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                     <div key={day}>
                       {console.log(Object.keys(currentUser.data.availability))}
                       <h3>
-                        Day:
-                        <input
+                        Day: {day}
+                        {/* <input
                           type="text"
                           value={day}
                           onChange={(e) =>
                             handleInputChange(day, "day", e.target.value)
                           }
-                        />
+                          style={{
+                            fontFamily: "Poppins",
+                            marginLeft: "3px",
+                            padding: "3px",
+                            borderRadius: "5px",
+                          }} */}
                       </h3>
                       <Typography>Start Time:</Typography>
                       <input

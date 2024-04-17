@@ -9,21 +9,9 @@ import Paper from "@mui/material/Paper";
 import { Button, Box } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import UserDetailsModal from "./UserDetailsModal";
-import { deleteUserByUid } from "../Services/UserServices/User";
+import ClientDetailsModal from "./ClientDetailsModal";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
-export default function UserDataTable({ users, deleteUser, setIsChanges }) {
+const ClientDataTable = ({ clients, deleteClient }) => {
   const [open, setOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
@@ -34,14 +22,12 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
     setOpen(true);
     setCurrentUser(user);
   };
-
   return (
     <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell sx={style.cellHead}>Profile Image</TableCell>
               <TableCell sx={style.cellHead} align="left">
                 Full Name
               </TableCell>
@@ -49,29 +35,38 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                 Email
               </TableCell>
               <TableCell sx={style.cellHead} align="left">
-                City / State
+                City
               </TableCell>
               <TableCell sx={style.cellHead} align="left">
-                Action
+                Zip
+              </TableCell>
+              <TableCell sx={style.cellHead} align="left">
+                Address
+              </TableCell>
+              <TableCell sx={style.cellHead} align="left">
+                Phone
+              </TableCell>
+              <TableCell sx={style.cellHead} align="left">
+                ACTION
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users &&
-              users.length > 0 &&
-              users?.map((row) => (
+            {clients &&
+              clients.length > 0 &&
+              clients?.map((row) => (
                 <TableRow
-                  key={row?.data?.name}
+                  key={row?.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    <Avatar alt={row?.data?.name} src={row?.data?.imageURL} />
-                  </TableCell>
-                  <TableCell align="left">{row?.data?.name}</TableCell>
-                  <TableCell align="left">{row?.data?.email}</TableCell>
                   <TableCell align="left">
-                    {row?.data?.city} / {row?.data?.state}
+                    {row?.data?.firstName} {row?.data?.lastName}
                   </TableCell>
+                  <TableCell align="left">{row?.data?.email}</TableCell>
+                  <TableCell align="left">{row?.data?.city}</TableCell>
+                  <TableCell align="left">{row?.data?.zipCode}</TableCell>
+                  <TableCell align="left">{row?.data?.address}</TableCell>
+                  <TableCell align="left">{row?.data?.phoneNumber}</TableCell>
                   <TableCell align="left">
                     <Box
                       sx={{
@@ -93,7 +88,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                         <Button
                           variant="contained"
                           onClick={() => {
-                            deleteUser(row?.id, false);
+                            deleteClient(row?.id, false);
                           }}
                           sx={{
                             backgroundColor: "red",
@@ -108,7 +103,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                         <Button
                           variant="contained"
                           onClick={() => {
-                            deleteUser(row?.id, true);
+                            deleteClient(row?.id, true);
                           }}
                           sx={{
                             backgroundColor: "red",
@@ -127,15 +122,16 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <UserDetailsModal
+      <ClientDetailsModal
         open={open}
         handleClose={handleClose}
         currentUser={currentUser}
-        setIsChanges={setIsChanges}
       />
     </>
   );
-}
+};
+
+export default ClientDataTable;
 const style = {
   cellHead: {
     fontFamily: "Poppins",

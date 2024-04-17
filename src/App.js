@@ -15,6 +15,7 @@ import { useContext } from "react";
 import Login from "./Pages/Login/Login";
 import Services from "./Pages/Services";
 import Remainder from "./Pages/Remainders";
+import Client from "./Pages/Clients/Client";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
       <Route path="/" element={<ResponsiveDrawer />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/Users" element={<Users />} />
+        <Route path="/Clients" element={<Client />} />
         <Route path="/Services" element={<Services />} />
         <Route path="/Remainders" element={<Remainder />} />
       </Route>

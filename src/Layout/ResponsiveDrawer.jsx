@@ -61,6 +61,10 @@ function ResponsiveDrawer(props) {
       text: "Remainders",
       link: "/Remainders",
     },
+    {
+      text: "Clients",
+      link: "/Clients",
+    },
   ];
 
   const drawer = (

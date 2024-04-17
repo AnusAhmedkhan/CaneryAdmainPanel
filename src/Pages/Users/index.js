@@ -9,17 +9,17 @@ const Index = () => {
   const allUsers = () => {
     getAllUsers().then((data) => {
       setUsers(data);
-      console.log(data, "data");
     });
   };
-  const deleteUser = (id) => {
-    deleteUserByUid(id).then(() => {
+  const deleteUser = (id, val) => {
+    deleteUserByUid(id, val).then(() => {
       toast.success("User Deleted SuccessFully");
       allUsers();
     });
   };
   useEffect(() => {
     allUsers();
+    console.log(users);
   }, []);
   useEffect(() => {
     allUsers();

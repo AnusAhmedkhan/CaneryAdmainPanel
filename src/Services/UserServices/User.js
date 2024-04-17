@@ -30,8 +30,23 @@ export const getAllClients = async () => {
   });
   return temp;
 };
-export const deleteUserByUid = async (id) => {
-  await deleteDoc(doc(db, "users", id));
+// export const deleteUserByUid = async (id) => {
+//   await deleteDoc(doc(db, "users", id));
+// };
+
+export const deleteUserByUid = async (id, val) => {
+  const userDocRef = doc(db, "users", id);
+
+  try {
+    await updateDoc(userDocRef, {
+      isShow: val, // Set isShow to false
+    });
+
+    console.log(`User with ID ${id} show status updated successfully.`);
+  } catch (error) {
+    console.error("Error updating user show status:", error);
+    // Handle error appropriately (e.g., show error message to user)
+  }
 };
 
 export const updateUserDoc = async (item) => {
@@ -41,7 +56,7 @@ export const updateUserDoc = async (item) => {
 };
 
 //services
-const fetchUserName = async (providerId) => {
+export const fetchUserName = async (providerId) => {
   try {
     const userDocRef = doc(db, "users", providerId);
     const userDocSnap = await getDoc(userDocRef);

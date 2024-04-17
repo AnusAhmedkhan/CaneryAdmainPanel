@@ -97,35 +97,48 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
 
   const [editedAvailability, setEditedAvailability] = React.useState({});
 
-  const handleInputChange = (oldDay, field, value) => {
-    const updatedAvailability = { ...editedAvailability };
-
-    if (!updatedAvailability[oldDay]) {
-      updatedAvailability[oldDay] = {
-        ...currentUser.data.availability[oldDay],
-      };
-    }
-
-    if (field === "day") {
-      const { startTime, endTime } = updatedAvailability[oldDay];
-      delete updatedAvailability[oldDay];
-      updatedAvailability[value] = { startTime, endTime };
-    } else {
-      updatedAvailability[oldDay][field] = value;
-    }
-
-    // setEditedAvailability(updatedAvailability);
-    const updatedData = {
+  const handleInputChange = (day, field, value) => {
+    const updatedAvailability = {
       ...currentUser.data.availability,
-      ...updatedAvailability,
+      [day]: {
+        ...currentUser.data.availability[day],
+        [field]: value,
+      },
     };
+
     setCurrentUser({
       ...currentUser,
       data: {
         ...currentUser.data,
-        availability: updatedData,
+        availability: updatedAvailability,
       },
     });
+  };
+  const handleAddNewAvailability = () => {
+    const newDay = prompt("Enter a new day (e.g., Monday)");
+
+    if (newDay) {
+      // Check if the entered day already exists in the current availability data
+      if (currentUser.data.availability[newDay]) {
+        alert(`"${newDay}" already exists. Please enter a different day.`);
+        return;
+      }
+
+      // Add the new day with empty startTime and endTime
+      setCurrentUser({
+        ...currentUser,
+        data: {
+          ...currentUser.data,
+          availability: {
+            ...currentUser.data.availability,
+            [newDay]: {
+              startTime: "",
+              endTime: "",
+            },
+          },
+        },
+      });
+    }
   };
 
   const handleEdit = () => {
@@ -134,14 +147,13 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
         toast.success("User Updated Successfully");
         setIsChanges(true);
         handleClose();
-        setEditedAvailability({});
       })
       .catch((err) => {
         toast.error("User Not Updated");
       });
   };
   React.useEffect(() => {
-    console.log(currentUser.data.availability["Wednesday"], "current user");
+    console.log(currentUser, "current user");
   }, [currentUser]);
 
   return (
@@ -269,16 +281,23 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                     <div key={day}>
                       {console.log(Object.keys(currentUser.data.availability))}
                       <h3>
-                        Day:
-                        <input
+                        Day: {day}
+                        {/* <input
                           type="text"
                           value={day}
                           onChange={(e) =>
                             handleInputChange(day, "day", e.target.value)
                           }
-                        />
+                          style={{
+                            fontFamily: "Poppins",
+                            marginLeft: "3px",
+                            padding: "3px",
+                            borderRadius: "5px",
+                          }} */}
                       </h3>
-                      <Typography>Start Time:</Typography>
+                      <Typography sx={{ fontFamily: "Poppins" }}>
+                        Start Time:
+                      </Typography>
                       <input
                         type="text"
                         value={
@@ -286,14 +305,26 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                           currentUser.data.availability[day].startTime ||
                           ""
                         }
+                        style={{
+                          borderRadius: "5px",
+                          padding: "3px",
+                          fontFamily: "Poppins",
+                        }}
                         onChange={(e) =>
                           handleInputChange(day, "startTime", e.target.value)
                         }
                       />
 
-                      <Typography>End Time:</Typography>
+                      <Typography sx={{ fontFamily: "Poppins" }}>
+                        End Time:
+                      </Typography>
                       <input
                         type="text"
+                        style={{
+                          borderRadius: "5px",
+                          padding: "3px",
+                          fontFamily: "Poppins",
+                        }}
                         value={
                           editedAvailability[day]?.endTime ||
                           currentUser.data.availability[day].endTime ||
@@ -307,6 +338,13 @@ const EditDetails = ({ currentUsers, setIsChanges, handleClose }) => {
                     <hr />
                   </>
                 ))}
+                <Button
+                  variant="outlined"
+                  onClick={handleAddNewAvailability}
+                  sx={{ mt: 2 }}
+                >
+                  Add New Availability
+                </Button>
               </Box>
               <Typography sx={style.key}>
                 Bisuness Category : <br />

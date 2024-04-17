@@ -43,7 +43,7 @@ const RemainderCard = ({ clientName, sellerName, date, description }) => {
         >
           Date: {formatDate(date).split(",")[0]}
         </Typography>
-        <Typography sx={[styles.typo, { minHeight: "80px" }]} gutterBottom>
+        <Typography sx={[styles.typo, { minHeight: "100px" }]} gutterBottom>
           Description: {description}
         </Typography>
       </CardContent>

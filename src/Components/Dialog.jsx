@@ -9,10 +9,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 import toast from "react-hot-toast";
-import { getAllClients, getAllUsers } from "../Services/UserServices/User";
+import {
+  createRemainder,
+  getAllClients,
+  getAllUsers,
+} from "../Services/UserServices/User";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -20,6 +24,7 @@ function SimpleDialog(props) {
   const { onClose, open } = props;
   const [clientId, setClientId] = React.useState("");
   const [sellerId, setSellerId] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [users, setUsers] = React.useState([]);
   const [clients, setClients] = React.useState([]);
   const getData = async () => {
@@ -37,10 +42,21 @@ function SimpleDialog(props) {
     setClientId(event.target.value);
     console.log(event.target.value, "clientId");
   };
-  const handleAdd = () => {
-    setSellerId("");
-    setClientId("");
-    onClose();
+  const handleAdd = async () => {
+    if (!sellerId.trim() || !clientId.trim() || !description.trim()) {
+      toast.error("Select or Fill all");
+      return;
+    }
+    try {
+      const form = { sellerId, clientId, description };
+      const res = await createRemainder(form);
+      toast.success("Remainder Add Succcesfully");
+      setSellerId("");
+      setClientId("");
+      onClose();
+    } catch (error) {
+      toast.error("Errro");
+    }
   };
   React.useEffect(() => {
     getData();
@@ -75,7 +91,7 @@ function SimpleDialog(props) {
       >
         Select Seller Name
       </Typography>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ mt: 1, minWidth: 120 }} size="large">
         <InputLabel id="demo-select-small-label">Seller</InputLabel>
         <Select
           labelId="demo-select-small-label"
@@ -99,7 +115,7 @@ function SimpleDialog(props) {
       >
         Select Client Name
       </Typography>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ mt: 1, minWidth: 120 }} size="large">
         <InputLabel id="demo-select-small-label">Clients</InputLabel>
         <Select
           labelId="demo-select-small-label"
@@ -117,6 +133,14 @@ function SimpleDialog(props) {
           })}
         </Select>
       </FormControl>
+      <TextField
+        rows={4}
+        multiline
+        sx={{ mt: 2 }}
+        label=" Add Description"
+        variant="outlined"
+        onChange={(e) => setDescription(e.target.value)}
+      />
 
       <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
         <Button

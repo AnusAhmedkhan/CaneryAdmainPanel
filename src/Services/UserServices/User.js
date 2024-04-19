@@ -151,6 +151,28 @@ export const getAllRemainders = async () => {
   }
 };
 
+export const getAllInvoices = async () => {
+  const collRef = collection(db, "invoice");
+  try {
+    const docRef = await getDocs(collRef);
+    const docData = docRef.docs.map(async (document) => {
+      const id = document.data().providerId;
+      const userDocRef = doc(db, "users", id);
+      const userDocSnap = await getDoc(userDocRef);
+
+      return {
+        ...document.data(),
+
+        sellerName: userDocSnap.data().name,
+      };
+    });
+
+    return Promise.all(docData);
+  } catch (error) {
+    return error;
+  }
+};
+
 export const createRemainder = async (form) => {
   const collRef = collection(db, "remainder");
   try {

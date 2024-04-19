@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ServiceCard from "../../Components/ServiceCard";
 import { getServices } from "../../Services/UserServices/User";
@@ -16,6 +16,9 @@ const Services = () => {
   return (
     <Box sx={styles.main}>
       <Container sx={styles.cont}>
+        <Box sx={styles.btnParent}>
+          <Typography sx={styles.typo}>Services</Typography>
+        </Box>
         <Grid
           container
           columnSpacing={3}
@@ -23,7 +26,7 @@ const Services = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-
+            marginTop: "2px",
             width: "100%",
           }}
         >
@@ -46,5 +49,18 @@ const styles = {
 
   cont: {
     maxWidth: { lg: "1300px" },
+  },
+  btnParent: {
+    width: "100%",
+    display: "flex",
+
+    alignItems: "center",
+  },
+  typo: {
+    color: "#036DDD",
+    fontFamily: "'poppins'",
+    fontWeight: "bold",
+    fontSize: "32px",
+    marginLeft: "5px",
   },
 };

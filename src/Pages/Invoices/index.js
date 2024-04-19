@@ -1,14 +1,18 @@
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getAllRemainders } from "../../Services/UserServices/User";
+import {
+  getAllInvoices,
+  getAllRemainders,
+} from "../../Services/UserServices/User";
 import RemainderCard from "../../Components/RemainderCard";
 import GroupsDialog from "../../Components/Dialog";
+import InvoiceCard from "../../Components/InvoiceCard";
 
-const Remainder = () => {
+const Invoices = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const getData = async () => {
-    const data1 = await getAllRemainders();
+    const data1 = await getAllInvoices();
     console.log(data1, "services");
     setData(data1);
   };
@@ -19,10 +23,7 @@ const Remainder = () => {
     <Box sx={styles.main}>
       <Container sx={styles.cont}>
         <Box sx={styles.btnParent}>
-          <Typography sx={styles.typo}>Remainders</Typography>
-          <Button sx={styles.btn} onClick={() => setOpen(true)}>
-            Add Remainder
-          </Button>
+          <Typography sx={styles.typo}>Invoices</Typography>
         </Box>
         <Grid
           container
@@ -35,11 +36,13 @@ const Remainder = () => {
             return (
               <>
                 <Grid item lg={4} xl={4} md={6} sm={12} xs={12} key={index}>
-                  <RemainderCard
+                  <InvoiceCard
                     sellerName={items.sellerName}
                     clientName={items.clientName}
-                    date={items.date}
-                    description={items.description}
+                    service={items.service}
+                    serviceCategory={items.serviceCategory}
+                    price={items.price}
+                    paymentType={items.paymentType}
                   />
                 </Grid>
               </>
@@ -60,7 +63,6 @@ const Remainder = () => {
   );
 };
 
-export default Remainder;
 const styles = {
   main: { marginTop: "5rem", width: "100%", overFlow: "hidden" },
 
@@ -70,15 +72,7 @@ const styles = {
   btnParent: {
     width: "100%",
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  typo: {
-    color: "#036DDD",
-    fontFamily: "'poppins'",
-    fontWeight: "bold",
-    fontSize: "32px",
-    marginLeft: "5px",
+    justifyContent: "flex-start",
   },
   btn: {
     fontFamily: "'poppins'",
@@ -90,4 +84,13 @@ const styles = {
     paddingX: "10px",
     fontSize: "15px",
   },
+  typo: {
+    color: "#036DDD",
+    fontFamily: "'poppins'",
+    fontWeight: "bold",
+    fontSize: "35px",
+    marginLeft: "5px",
+  },
 };
+
+export default Invoices;

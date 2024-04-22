@@ -16,6 +16,8 @@ import Login from "./Pages/Login/Login";
 import Services from "./Pages/Services";
 import Remainder from "./Pages/Remainders";
 import Client from "./Pages/Clients/Client";
+import Invoices from "./Pages/Invoices";
+import Withdrawal from "./Pages/WithDrawal";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -27,6 +29,8 @@ function App() {
         <Route path="/Clients" element={<Client />} />
         <Route path="/Services" element={<Services />} />
         <Route path="/Remainders" element={<Remainder />} />
+        <Route path="/Invoices" element={<Invoices />} />
+        <Route path="/Withdrawal" element={<Withdrawal />} />
       </Route>
     )
   );

@@ -6,24 +6,32 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Chip, Grid, TextField } from "@mui/material";
-const RemainderCard = ({ clientName, sellerName, date, description }) => {
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
+const InvoiceCard = ({
+  clientName,
+  sellerName,
+  paymentType,
+  price,
+  service,
+  serviceCategory,
+}) => {
+  //   const formatDate = (timestamp) => {
+  //     const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
 
-    // Format the date
-    const formattedDate = date.toLocaleString("en-US", {
-      timeZone: "UTC",
-      timeZoneName: "short",
-    });
+  //     // Format the date
+  //     const formattedDate = date.toLocaleString("en-US", {
+  //       timeZone: "UTC",
+  //       timeZoneName: "short",
+  //     });
 
-    return formattedDate;
-  };
+  //     return formattedDate;
+  //   };
   return (
     <Card
       sx={{
         position: "relative",
         borderRadius: "20px",
         boxShadow: 3,
+        minHeight: "350px",
         background:
           "linear-gradient(90deg, rgba(5,117,230,1) 0%, rgba(2,41,138,1) 82%)",
       }}
@@ -41,17 +49,34 @@ const RemainderCard = ({ clientName, sellerName, date, description }) => {
           sx={[styles.typo, { color: "white", fontWeight: 600 }]}
           gutterBottom
         >
-          Date: {formatDate(date).split(",")[0]}
+          Service: {service}
         </Typography>
-        <Typography sx={[styles.typo, { minHeight: "100px" }]} gutterBottom>
-          Description: {description}
+        <Typography
+          sx={[styles.typo, { color: "white", fontWeight: 600 }]}
+          gutterBottom
+        >
+          Service: {service}
+        </Typography>
+        <Typography sx={[styles.typo]} gutterBottom>
+          Service Category: {serviceCategory}
+        </Typography>
+        <Typography
+          sx={[styles.typo, { color: "white", fontWeight: 600 }]}
+          gutterBottom
+        >
+          Price: {price}
+        </Typography>
+        <Typography
+          sx={[styles.typo, { color: "white", fontWeight: 600 }]}
+          gutterBottom
+        >
+          payment Type: {paymentType}
         </Typography>
       </CardContent>
     </Card>
   );
 };
 
-export default RemainderCard;
 const styles = {
   typo: {
     fontFamily: "'poppins'",
@@ -87,3 +112,5 @@ const styles = {
     opacity: 0.5,
   },
 };
+
+export default InvoiceCard;

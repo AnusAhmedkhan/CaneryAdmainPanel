@@ -1,4 +1,10 @@
-import { collection, getDoc, getDocs } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../Firebase/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import { updateDoc } from "firebase/firestore";
@@ -140,6 +146,43 @@ export const getAllRemainders = async () => {
     });
 
     return Promise.all(docData);
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getAllInvoices = async () => {
+  const collRef = collection(db, "invoice");
+  try {
+    const docRef = await getDocs(collRef);
+    const docData = docRef.docs.map(async (document) => {
+      const id = document.data().providerId;
+      const userDocRef = doc(db, "users", id);
+      const userDocSnap = await getDoc(userDocRef);
+
+      return {
+        ...document.data(),
+
+        sellerName: userDocSnap.data().name,
+      };
+    });
+
+    return Promise.all(docData);
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createRemainder = async (form) => {
+  const collRef = collection(db, "remainder");
+  try {
+    const resp = addDoc(collRef, {
+      clientId: form.clientId,
+      date: Timestamp.now(),
+      description: form.description,
+      providerId: form.sellerId,
+    });
+    return resp;
   } catch (error) {
     return error;
   }

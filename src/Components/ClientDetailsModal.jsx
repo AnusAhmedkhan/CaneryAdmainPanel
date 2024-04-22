@@ -61,6 +61,7 @@ const ClientDetailsModal = ({ handleClose, currentUser, open }) => {
   };
   React.useEffect(() => {
     findSellerById();
+    setCurrentUser(currentUser);
   }, []);
   return (
     <Dialog

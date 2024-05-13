@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import UserDetailsModal from "./UserDetailsModal";
 import ClientDetailsModal from "./ClientDetailsModal";
@@ -52,8 +52,7 @@ const ClientDataTable = ({ clients, deleteClient }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {clients &&
-              clients.length > 0 &&
+            {clients && clients.length > 0 ? (
               clients?.map((row) => (
                 <TableRow
                   key={row?.id}
@@ -118,7 +117,29 @@ const ClientDataTable = ({ clients, deleteClient }) => {
                     </Box>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: 25,
+                    margin: "10px",
+                    textAlign: "left",
+                  }}
+                >
+                  Loading...
+                </Typography>
+              </Box>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

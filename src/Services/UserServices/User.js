@@ -30,6 +30,19 @@ export const getAllClients = async () => {
   });
   return temp;
 };
+
+export const getAllRequests = async () => {
+  let temp = [];
+  const querySnapshot = await getDocs(collection(db, "withdrwalRequests"));
+  querySnapshot.forEach((doc) => {
+    temp.push({
+      data: doc.data(),
+      id: doc.id,
+    });
+  });
+  // console.log(temp, "temp");
+  return temp;
+};
 // export const deleteUserByUid = async (id) => {
 //   await deleteDoc(doc(db, "users", id));
 // };

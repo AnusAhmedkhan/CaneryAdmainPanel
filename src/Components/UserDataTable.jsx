@@ -6,10 +6,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import UserDetailsModal from "./UserDetailsModal";
 import { deleteUserByUid } from "../Services/UserServices/User";
+import Lottie from "lottie-react";
+import Loading from "../Lottie/loading.json";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -57,8 +59,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users &&
-              users.length > 0 &&
+            {users && users.length > 0 ? (
               users?.map((row) => (
                 <TableRow
                   key={row?.data?.name}
@@ -76,12 +77,13 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "row",
+                        flexDirection: { lg: "row", xs: "column" },
                         alignItems: "center",
                         gap: "14px",
                       }}
                     >
                       <Button
+                        sx={{ width: "100%" }}
                         variant="contained"
                         onClick={() => {
                           handleModal(row);
@@ -97,6 +99,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                           }}
                           sx={{
                             backgroundColor: "red",
+                            width: "100%",
                             ":hover": {
                               backgroundColor: "red",
                             },
@@ -112,6 +115,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                           }}
                           sx={{
                             backgroundColor: "red",
+                            wdith: "100%",
                             ":hover": {
                               backgroundColor: "red",
                             },
@@ -123,7 +127,29 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                     </Box>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: 25,
+                    margin: "10px",
+                    textAlign: "left",
+                  }}
+                >
+                  Loading...
+                </Typography>
+              </Box>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

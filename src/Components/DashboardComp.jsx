@@ -5,9 +5,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Chip, Grid, TextField } from "@mui/material";
+import { Chip, CircularProgress, Grid, TextField } from "@mui/material";
 import { BsJustify } from "react-icons/bs";
 import img from "../assets/comhiclipartqrhfw.jpg";
+import Lottie from "lottie-react";
+import Loading from "../Lottie/loading.json";
 
 const bull = (
   <Box
@@ -44,9 +46,17 @@ function DashboardComp({ name, bool, num }) {
           <Typography sx={[styles.typo, { fontSize: bool && "35px" }]}>
             {name}
           </Typography>
-          <Typography sx={[styles.num, { fontSize: bool && "30px" }]}>
-            {num}
-          </Typography>
+          {num ? (
+            <Typography sx={[styles.num, { fontSize: bool && "30px" }]}>
+              {num}
+            </Typography>
+          ) : (
+            <Lottie
+              animationData={Loading}
+              loop={true}
+              style={{ width: "67px", height: "55px" }}
+            />
+          )}
         </Box>
       </CardContent>
     </Card>
@@ -59,6 +69,8 @@ const styles = {
     fontSize: "25px",
     color: "white",
     fontWeight: 600,
+    position: "relative",
+    zIndex: 999,
   },
   num: {
     fontFamily: "'poppins'",

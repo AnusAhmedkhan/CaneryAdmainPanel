@@ -1,4 +1,11 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   getAllInvoices,
@@ -7,23 +14,68 @@ import {
 import RemainderCard from "../../Components/RemainderCard";
 import GroupsDialog from "../../Components/Dialog";
 import InvoiceCard from "../../Components/InvoiceCard";
+import Lottie from "lottie-react";
+import Loading from "../../Lottie/loading.json";
 
 const Invoices = () => {
   const [data, setData] = useState([]);
+  const [val, setVal] = useState("");
+  const [originalUsers, setOriginalUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const getData = async () => {
     const data1 = await getAllInvoices();
     console.log(data1, "services");
     setData(data1);
+    setOriginalUsers(data1);
   };
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    // Reset users to originalUsers when val becomes empty
+    if (val === "") {
+      setData(originalUsers);
+    } else if (val && originalUsers.length > 0) {
+      const filteredUsers = originalUsers?.filter((user) => {
+        const searchVal = val.toLowerCase().trim();
+        const fullName = user?.clientName?.toLowerCase();
+        const email = user?.sellerName?.toLowerCase();
+        const service = user?.service?.toLowerCase();
+        const serviceCat = user?.serviceCategory?.toLowerCase();
+
+        return (
+          serviceCat?.includes(searchVal) ||
+          fullName?.includes(searchVal) ||
+          email?.includes(searchVal)
+        );
+      });
+      setData(filteredUsers);
+    }
+  }, [val, originalUsers]);
   return (
     <Box sx={styles.main}>
       <Container sx={styles.cont}>
         <Box sx={styles.btnParent}>
-          <Typography sx={styles.typo}>Invoices</Typography>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: { md: "row", xs: "column" },
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography sx={styles.typo}>Invoices</Typography>
+            <TextField
+              id="outlined-basic"
+              label="Search Users..."
+              variant="outlined"
+              value={val}
+              onChange={(e) => {
+                setVal(e.target.value);
+              }}
+            />
+          </Box>
         </Box>
         <Grid
           container
@@ -32,22 +84,39 @@ const Invoices = () => {
           rowSpacing={3}
           marginTop={2}
         >
-          {data?.map((items, index) => {
-            return (
-              <>
-                <Grid item lg={4} xl={4} md={6} sm={12} xs={12} key={index}>
-                  <InvoiceCard
-                    sellerName={items.sellerName}
-                    clientName={items.clientName}
-                    service={items.service}
-                    serviceCategory={items.serviceCategory}
-                    price={items.price}
-                    paymentType={items.paymentType}
-                  />
-                </Grid>
-              </>
-            );
-          })}
+          {data && data.length > 0 ? (
+            data?.map((items, index) => {
+              return (
+                <>
+                  <Grid item lg={4} xl={4} md={6} sm={12} xs={12} key={index}>
+                    <InvoiceCard
+                      sellerName={items.sellerName}
+                      clientName={items.clientName}
+                      service={items.service}
+                      serviceCategory={items.serviceCategory}
+                      price={items.price}
+                      paymentType={items.paymentType}
+                    />
+                  </Grid>
+                </>
+              );
+            })
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "2px",
+                width: "100%",
+              }}
+            >
+              <Lottie
+                animationData={Loading}
+                loop={true}
+                style={{ width: "200px", height: "200px" }}
+              />
+            </Box>
+          )}
         </Grid>
         {open && (
           <GroupsDialog

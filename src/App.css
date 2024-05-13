@@ -47,12 +47,12 @@ input_wrapper {
 
 /*Important*/
 label {
-  background: #fff;
+  /* background: #fff; */
   padding: 0.8rem 2rem;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 500;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); */
   animation: reveal_button 0.5s linear; /* Extras */
 }
 

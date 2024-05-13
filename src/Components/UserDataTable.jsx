@@ -115,7 +115,7 @@ export default function UserDataTable({ users, deleteUser, setIsChanges }) {
                           }}
                           sx={{
                             backgroundColor: "red",
-                            wdith: "100%",
+                            width: "100%",
                             ":hover": {
                               backgroundColor: "red",
                             },

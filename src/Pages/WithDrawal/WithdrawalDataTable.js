@@ -45,7 +45,30 @@ export default function WithdrawalDataTable({ requests }) {
                   </TableCell>
 
                   <TableCell align="center">
-                    <Button variant="contained">Requests</Button>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { lg: "row", xs: "column" },
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                        gap: "14px",
+                      }}
+                    >
+                      <Button variant="contained">Accept</Button>
+
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "red",
+                          ":hover": {
+                            backgroundColor: "red",
+                          },
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))

@@ -23,15 +23,15 @@ function App() {
   const { user } = useContext(AuthContext);
   const mainRoutes = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/admin" element={<ResponsiveDrawer />}>
-        <Route path="/admin" element={<Dashboard />} />
+      <Route path="/" element={<ResponsiveDrawer />}>
+        <Route path="/" element={<Dashboard />} />
 
-        <Route path="/admin/Users" element={<Users />} />
-        <Route path="/admin/Clients" element={<Client />} />
-        <Route path="/admin/Services" element={<Services />} />
-        <Route path="/admin/Remainders" element={<Remainder />} />
-        <Route path="/admin/Invoices" element={<Invoices />} />
-        <Route path="/admin/Withdrawal" element={<Withdrawal />} />
+        <Route path="/Users" element={<Users />} />
+        <Route path="/Clients" element={<Client />} />
+        <Route path="/Services" element={<Services />} />
+        <Route path="/Remainders" element={<Remainder />} />
+        <Route path="/Invoices" element={<Invoices />} />
+        <Route path="/Withdrawal" element={<Withdrawal />} />
       </Route>
     )
   );

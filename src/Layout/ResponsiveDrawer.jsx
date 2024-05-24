@@ -47,27 +47,27 @@ function ResponsiveDrawer(props) {
   const list = [
     {
       text: "Dashboard",
-      link: "/admin",
+      link: "/",
     },
     {
       text: "Users",
-      link: "/admin/Users",
+      link: "/Users",
     },
     {
       text: "Services",
-      link: "/admin/Services",
+      link: "/Services",
     },
     {
       text: "Remainders",
-      link: "/admin/Remainders",
+      link: "/Remainders",
     },
     {
       text: "Clients",
-      link: "/admin/Clients",
+      link: "/Clients",
     },
     {
       text: "Invoices",
-      link: "/admin/Invoices",
+      link: "/Invoices",
     },
     {
       text: "Withdrawal",

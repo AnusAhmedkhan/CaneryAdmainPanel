@@ -5,6 +5,7 @@ import {
   RouterProvider,
   createRoutesFromElements,
   Route,
+  Navigate,
 } from "react-router-dom";
 import Dashboard from "../src/Pages/Dashboard";
 import Users from "../src/Pages/Users";
@@ -21,24 +22,28 @@ import Withdrawal from "./Pages/WithDrawal";
 
 function App() {
   const { user } = useContext(AuthContext);
+
   const mainRoutes = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<ResponsiveDrawer />}>
-        <Route path="/" element={<Dashboard />} />
-
-        <Route path="/Users" element={<Users />} />
-        <Route path="/Clients" element={<Client />} />
-        <Route path="/Services" element={<Services />} />
-        <Route path="/Remainders" element={<Remainder />} />
-        <Route path="/Invoices" element={<Invoices />} />
-        <Route path="/Withdrawal" element={<Withdrawal />} />
-      </Route>
+      <>
+        <Route path="/" element={<Navigate to="/admin" replace />} />,
+        <Route path="/admin" element={<ResponsiveDrawer />}>
+          <Route path="/admin" element={<Dashboard />} />
+          <Route path="/admin/Users" element={<Users />} />
+          <Route path="/admin/Clients" element={<Client />} />
+          <Route path="/admin/Services" element={<Services />} />
+          <Route path="/admin/Remainders" element={<Remainder />} />
+          <Route path="/admin/Invoices" element={<Invoices />} />
+          <Route path="/admin/Withdrawal" element={<Withdrawal />} />
+        </Route>
+      </>
     )
   );
   const authRoutes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Navigate to="/Login" replace />} />,
+        <Route path="/Login" element={<Login />} />
       </>
     )
   );

@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 import { adminLogin } from "../../Services/AuthServices/Auth";
 import { AuthContext } from "../../Context/AuthContext";
 
 const Login = () => {
+
   const { user, setUser } = useContext(AuthContext);
   let initialFormData = {
     email: "",
@@ -35,6 +36,7 @@ const Login = () => {
     if (res === true) {
       toast.success("Login Successful");
       setUser(true);
+      navigate("/")
     } else {
       toast.error("Invalid Credentials");
     }

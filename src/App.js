@@ -42,8 +42,8 @@ function App() {
   const authRoutes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<Navigate to="/Login" replace />} />,
-        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/admin" replace />} />,
+        <Route path="/admin" element={<Login />} />
       </>
     )
   );

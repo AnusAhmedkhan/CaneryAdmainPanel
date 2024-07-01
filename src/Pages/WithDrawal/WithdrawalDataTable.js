@@ -7,10 +7,29 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, Box, Typography, Chip } from "@mui/material";
+import { handleRequest } from "../../Services/UserServices/User";
+import toast from "react-hot-toast";
 
-export default function WithdrawalDataTable({ requests }) {
+export default function WithdrawalDataTable({ requests, getData }) {
   console.log(requests, "request");
 
+  const handleWithdrawalRequest = async (
+    amount,
+    userId,
+    docId,
+    rejectRequest
+  ) => {
+    const response = await handleRequest(amount, userId, docId, rejectRequest);
+    console.log(response, "response");
+
+    if (response.statusCode === 200) {
+      toast.success(response.message, { duration: 70000 });
+      getData();
+    } else {
+      toast.error(response.message);
+      getData();
+    }
+  };
   return (
     <>
       <TableContainer component={Paper}>
@@ -19,7 +38,7 @@ export default function WithdrawalDataTable({ requests }) {
             <TableRow>
               <TableCell sx={style.cellHead}>Name</TableCell>
               <TableCell sx={style.cellHead} align="center">
-                Price
+                Amount
               </TableCell>
               <TableCell align="center" sx={style.cellHead}>
                 Status
@@ -40,7 +59,6 @@ export default function WithdrawalDataTable({ requests }) {
                   <TableCell align="left">{row?.data?.name}</TableCell>
                   <TableCell align="center">{row?.data?.price}</TableCell>
                   <TableCell align="center">
-                    {" "}
                     <Chip label={row?.data?.status} />
                   </TableCell>
 
@@ -55,7 +73,19 @@ export default function WithdrawalDataTable({ requests }) {
                         gap: "14px",
                       }}
                     >
-                      <Button variant="contained">Accept</Button>
+                      <Button
+                        variant="contained"
+                        onClick={() =>
+                          handleWithdrawalRequest(
+                            row?.data?.price,
+                            row?.data?.uid,
+                            row?.data?.id,
+                            false
+                          )
+                        }
+                      >
+                        Accept
+                      </Button>
 
                       <Button
                         variant="contained"
@@ -65,6 +95,14 @@ export default function WithdrawalDataTable({ requests }) {
                             backgroundColor: "red",
                           },
                         }}
+                        onClick={() =>
+                          handleWithdrawalRequest(
+                            row?.data?.price,
+                            row?.data?.uid,
+                            row?.data?.id,
+                            true
+                          )
+                        }
                       >
                         Reject
                       </Button>
@@ -102,7 +140,7 @@ export default function WithdrawalDataTable({ requests }) {
 }
 const style = {
   cellHead: {
-    fontFamily: "Poppins",
+    fontFamily: "'Poppins'",
     fontSize: 18,
     fontWeight: 600,
   },

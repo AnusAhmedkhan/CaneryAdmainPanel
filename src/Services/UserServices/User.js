@@ -8,6 +8,7 @@ import {
 import { db } from "../../Firebase/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import { updateDoc } from "firebase/firestore";
+import axios from "axios";
 export const getAllUsers = async () => {
   let temp = [];
   const querySnapshot = await getDocs(collection(db, "users"));
@@ -198,5 +199,81 @@ export const createRemainder = async (form) => {
     return resp;
   } catch (error) {
     return error;
+  }
+};
+
+export const handleRequest = async (amount, userId, docId, rejectRequest) => {
+  const userDocRef = doc(db, "users", userId);
+  const requestDocRef = doc(db, "withdrwalRequests", docId);
+
+  try {
+    // Fetch user and request documents
+    const [userDocSnap, requestDocSnap] = await Promise.all([
+      getDoc(userDocRef),
+      getDoc(requestDocRef),
+    ]);
+
+    if (!userDocSnap.exists()) {
+      return {
+        message: `User document with ID ${userId} does not exist.`,
+        status: "error",
+        statusCode: 404,
+      };
+    }
+    if (!requestDocSnap.exists()) {
+      return {
+        message: `Request document with ID ${docId} does not exist.`,
+        status: "error",
+        statusCode: 404,
+      };
+    }
+
+    // Handle request rejection
+    if (rejectRequest) {
+      await updateDoc(requestDocRef, { status: "rejected" });
+      return {
+        message: "Request rejected",
+        status: "rejected",
+        statusCode: 200,
+      };
+    }
+
+    // Proceed with sending money
+    try {
+      const response = await axios.post(
+        "https://www.canery.io:5000/vendor/connect/sendMoney",
+        {
+          amount: amount,
+          accountId: userDocSnap.data().accountId,
+        }
+      );
+
+      // Update the request status to "approved"
+      const updatedAmount = userDocSnap.data().wallet - amount;
+      await updateDoc(userDocRef, { wallet: updatedAmount });
+      await updateDoc(requestDocRef, { status: "approved" });
+      return {
+        message: "Request approved and Money Sent",
+        status: "approved",
+        statusCode: 200,
+      };
+    } catch (axiosError) {
+      // Update request status to "rejected" if the Axios request fails
+      await updateDoc(requestDocRef, { status: "rejected" });
+      return {
+        message: "Either you have no money admin or account is not verified",
+        status: "rejected",
+        statusCode: 400,
+      };
+    }
+  } catch (error) {
+    console.error("Error handling request:", error);
+    // Update request status to "rejected" if the overall process fails
+    try {
+      await updateDoc(requestDocRef, { status: "rejected" });
+    } catch (updateError) {
+      console.error("Error updating request status to rejected:", updateError);
+    }
+    return { message: error.message, status: "error", statusCode: 500 };
   }
 };

@@ -7,14 +7,16 @@ const Withdrawal = () => {
   const [data, setData] = useState();
 
   const getData = async () => {
-    const data1 = await getAllRequests();
-    console.log(data1, "withdrwal");
-    setData(data1);
+    const allRequests = await getAllRequests();
+    const pendingRequests = allRequests.filter(
+      (request) => request.data.status === "pending"
+    );
+    setData(pendingRequests);
   };
+
   useEffect(() => {
     getData();
   }, []);
-
   return (
     <>
       <Box sx={styles.main}>
@@ -39,7 +41,7 @@ const Withdrawal = () => {
             }}
           /> */}
           </Box>
-          <WithdrawalDataTable requests={data} />
+          <WithdrawalDataTable requests={data} getData={getData} />
         </Container>
       </Box>
     </>
